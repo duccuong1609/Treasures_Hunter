@@ -1,0 +1,53 @@
+package bfs_2d;
+
+import java.util.Stack;
+
+import javax.swing.JFrame;
+
+public class Main {
+
+	public static void main(String[] args) {
+		int maxVerTex = 9, rows = 3, cols = 3;
+		JFrame jFrame = new JFrame("BFS");
+		Graph graph = new Graph(maxVerTex, rows, cols);
+		int dir = 1;
+		int directionNumber = 4;
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				graph.addVertex(new Point(i, j), i, j);
+			}
+		}
+//		Auto add edge
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				for (int d = 0; d < directionNumber; d++) {
+					dir *= -1;
+					if (d < 2) {
+						if (graph.isExist(new Point(i, j), new Point(i - dir, j))) {
+							graph.addEdge(new Point(i, j), new Point(i - dir, j));
+						}
+					} else {
+						if (graph.isExist(new Point(i, j), new Point(i, j - dir))) {
+							graph.addEdge(new Point(i, j), new Point(i, j - dir));
+						}
+					}
+				}
+			}
+		}
+		graph.breadthFirstSearch_2d(new Point(2, 0), new Point(0, 2));
+		Stack<Point> points = graph.getPoints();
+		System.out.println(points.toString());
+
+//		System.out.println(graph.getEdges());
+
+//		graph.getMatrix();
+
+		jFrame.setSize(960, 960);
+		jFrame.add(graph.getJPanel());
+//		jFrame.pack();
+		jFrame.setDefaultCloseOperation(3);
+		jFrame.setVisible(true);
+
+	}
+
+}

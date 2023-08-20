@@ -1,0 +1,79 @@
+package bfs_2d;
+
+import java.awt.Color;
+import java.awt.Graphics;
+
+import javax.swing.JPanel;
+
+public class Panel extends JPanel {
+
+	private static final long serialVersionUID = 5484197088832008144L;
+	float x;
+	float y;
+	int width = 320;
+	int height = 320;
+	int stepSize = 5;
+	public final float speed = 0.1f;
+	private Point start, end;
+
+	public void setPoint(Point start, Point end) {
+		this.start = start;
+		this.end = end;
+	}
+
+	public Panel(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.setColor(Color.BLUE);
+		g.fillRect((int) x * 320, (int) y * 320, width, height);
+		updateY();
+		updateX();
+
+//		repaint();
+	}
+
+//	public void changePos() {
+//		if (start.getY() < end.getY()) {
+////			System.out.println(y);
+////			while (start.getY() != end.getY()) {
+////				y -= speed;
+////				start.setY(y);
+////			}
+//		} else {
+////			System.out.println();
+//			while ((int) start.getY() != (int) end.getY()) {
+//				y -= speed;
+//				start.setY(y);
+//				System.out.println(start.getY());
+//			}
+//		}
+//	}
+
+	private void updateX() {
+		if (start.getY() == end.getY()) {
+			if (start.getX() > end.getX()) {
+				x--;
+				start.setY(x);
+			} else {
+				x++;
+				start.setY(x);
+			}
+		}
+
+	}
+
+	private void updateY() {
+		if (start.getY() > end.getY()) {
+			y--;
+			start.setY(y);
+		} else {
+			y++;
+			start.setY(y);
+		}
+	}
+}

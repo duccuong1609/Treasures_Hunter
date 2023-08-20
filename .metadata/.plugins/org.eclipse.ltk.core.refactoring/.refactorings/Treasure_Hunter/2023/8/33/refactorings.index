@@ -1,5 +1,13 @@
 1692331332083	Delete element
 1692331373000	Delete element
 1692331403042	Delete element
+<<<<<<< HEAD
 1692342152246	Rename resource 'level_one_data_long.png'
 1692343719572	Delete element
+=======
+1692345609875	Rename package 'BFS'
+1692345667492	Rename package 'bfs'
+1692364824670	Delete element
+1692364842677	Rename compilation unit 'MyAnimation.java'
+1692458678992	Delete element
+>>>>>>> 4c29880e22ecdffc9a0e50c0a9381fafa1bfe4b5

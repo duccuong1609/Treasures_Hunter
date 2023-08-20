@@ -1,0 +1,184 @@
+package bfs_2d;
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+
+import javax.swing.JPanel;
+
+public class Graph extends JPanel {
+	private static final long serialVersionUID = 7812424665813952218L;
+	private Vertex[][] vertexcies;
+	private int rows, cols;
+	public static final float SPEED = 0.01f;
+	private Stack<Point> points;
+	private boolean isChecked = true;
+	private Point start;
+	private Point end;
+	private ArrayList<ArrayList<Point>> edges;
+
+	public Graph(int maxVertex, int rows, int cols) {
+		vertexcies = new Vertex[maxVertex][maxVertex];
+		this.rows = rows;
+		this.cols = cols;
+		points = new Stack<Point>();
+		edges = new ArrayList<ArrayList<Point>>();
+	}
+
+	public void addEdge(Point start, Point end) {
+		ArrayList<Point> matches = new ArrayList<Point>();
+		matches.add(start);
+		matches.add(end);
+
+		edges.add(matches);
+	}
+
+	public ArrayList<ArrayList<Point>> getEdges() {
+		return edges;
+	}
+
+	public void addVertex(Point point, int row, int col) {
+		vertexcies[row][col] = new Vertex(point);
+	}
+
+	public void breadthFirstSearch_2d(Point startVertex, Point endVertex) {
+		Queue<Point> queue = new LinkedList<>();
+		queue.add(startVertex);
+		vertexcies[(int) startVertex.getX()][(int) startVertex.getY()].setVisited(true);
+		while (!queue.isEmpty()) {
+			Point currentVertex = queue.remove();
+			if (points.size() == 0) {
+				points.push(currentVertex);
+			} else {
+				Point newVertex = points.peek();
+				if (currentVertex.getX() == newVertex.getX() || currentVertex.getY() == newVertex.getY()) {
+					points.push(currentVertex);
+				}
+			}
+
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					ArrayList<Point> EdgeChecks = new ArrayList<Point>();
+					EdgeChecks.add(currentVertex);
+					EdgeChecks.add(vertexcies[i][j].getPoint());
+					if (isExistEdge(EdgeChecks) && !vertexcies[i][j].isVisited()) {
+						queue.add(vertexcies[i][j].getPoint());
+						vertexcies[i][j].setVisited(true);
+					}
+				}
+			}
+			if (currentVertex.getX() == endVertex.getX() && currentVertex.getY() == endVertex.getY()) {
+				Point cross = points.peek();
+				if (currentVertex.getX() != cross.getX() && currentVertex.getY() != cross.getY()) {
+					points.push(new Point((int) cross.getX(), (int) currentVertex.getY()));
+					points.push(endVertex);
+				}
+				return;
+			}
+		}
+	}
+
+	public Stack<Point> getPoints() {
+		return points;
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+
+		if (isChecked) {
+			if (!points.isEmpty()) {
+				while (!points.isEmpty()) {
+					this.start = points.remove(0);
+					if (points.size() > 0 && points.get(0) != null) {
+						this.end = points.get(0);
+					}
+					break;
+				}
+			}
+		}
+
+		Graphics2D g2d = (Graphics2D) g;
+
+		Rectangle2D.Float rectangle = new Rectangle2D.Float(this.start.getX() * 320, this.start.getY() * 320, 320, 320);
+
+		g2d.draw(rectangle);
+
+		updatePos();
+
+		repaint();
+
+		try {
+			Thread.sleep(30);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private void updatePos() {
+		isChecked = (Math.round(start.getX() * 100.0) / 100.0) == (Math.round(end.getX() * 100.0) / 100.0)
+				&& (Math.round(start.getY() * 100.0) / 100.0) == (Math.round(end.getY() * 100.0) / 100.0);
+		if (start.getY() > end.getY()) {
+			start.setY(start.getY() - SPEED);
+		} else if (start.getY() < end.getY()) {
+			start.setY(start.getY() + SPEED);
+		}
+		if (start.getX() > end.getX()) {
+			start.setX(start.getX() - SPEED);
+		} else if (start.getX() < end.getX()) {
+			start.setX(start.getX() + SPEED);
+		}
+	}
+
+	private boolean isExistEdge(ArrayList<Point> points) {
+		boolean exists = false;
+		for (ArrayList<Point> array : edges) {
+			if (areArraysEqual(array, points)) {
+				exists = true;
+				break;
+			}
+		}
+		return exists;
+	}
+
+	public boolean areArraysEqual(ArrayList<Point> point_1, ArrayList<Point> point_2) {
+		int isExist = 0;
+
+		if (point_1.get(0).getX() == point_1.get(1).getX() && point_1.get(0).getY() == point_1.get(1).getY()
+				|| point_2.get(0).getX() == point_2.get(1).getX() && point_2.get(0).getY() == point_2.get(1).getY()) {
+			return false;
+		}
+		for (int i = 0; i < point_1.size(); i++) {
+			for (int j = 0; j < point_2.size(); j++) {
+				if (point_1.get(i).getX() == point_2.get(j).getX() && point_1.get(i).getY() == point_2.get(j).getY()) {
+					isExist++;
+				}
+			}
+//			Luot dau tien khong co
+			if (isExist < 1)
+				break;
+		}
+
+		return isExist == 2;
+	}
+
+	public boolean isExist(Point first, Point last) {
+		if (last.getX() < 0 || last.getY() < 0 || last.getX() >= cols || last.getY() >= rows) {
+			return false;
+		}
+		ArrayList<Point> points = new ArrayList<Point>();
+		points.add(first);
+		points.add(last);
+
+		if (isExistEdge(points)) {
+			return false;
+		}
+
+		return true;
+	}
+}
