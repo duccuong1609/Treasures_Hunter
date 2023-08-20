@@ -1,0 +1,60 @@
+package bfs_2d;
+
+import java.util.Stack;
+
+import javax.swing.JFrame;
+
+public class Main {
+
+	public static void main(String[] args) {
+		int maxVerTex = 9, rows = 3, cols = 3;
+		JFrame jFrame = new JFrame("BFS");
+		Graph graph = new Graph(maxVerTex, rows, cols);
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				graph.addVertex(new Point(i, j), i, j);
+			}
+		}
+//		matrix[0][1] = matrix[0][0] = 1
+		graph.addEdge(new Point(0, 0), new Point(0, 1));
+//		matrix[0][0] = matrix[1][0] = 1
+		graph.addEdge(new Point(0, 0), new Point(1, 0));
+//		matrix[0][1] = matrix[1][1] = 1
+		graph.addEdge(new Point(0, 1), new Point(1, 1));
+//		matrix[0][2] = matrix[0][1] = 1
+		graph.addEdge(new Point(0, 1), new Point(0, 2));
+//		matrix[1][1] = matrix[1][0] = 1
+		graph.addEdge(new Point(1, 0), new Point(1, 1));
+//		matrix[1][0] = matrix[2][0] = 1
+		graph.addEdge(new Point(1, 0), new Point(2, 0));
+//		matrix[2][1] = matrix[2][0] = 1
+		graph.addEdge(new Point(2, 0), new Point(2, 1));
+//		matrix[2][1] = matrix[1][1] = 1
+		graph.addEdge(new Point(2, 1), new Point(1, 1));
+//		matrix[2][2] = matrix[2][1] = 1
+		graph.addEdge(new Point(2, 1), new Point(2, 2));
+//		matrix[2][2] = matrix[1][2] = 1
+		graph.addEdge(new Point(2, 2), new Point(1, 2));
+//		matrix[1][1] = matrix[1][2] = 1
+		graph.addEdge(new Point(1, 2), new Point(1, 1));
+
+		graph.addEdge(new Point(1, 2), new Point(0, 2));
+		
+		graph.breadthFirstSearch_2d(new Point(0, 0), new Point(2, 2));
+		Stack<Point> points = graph.getPoints();
+		System.out.println(points.toString());
+
+//		System.out.println(graph.getEdges());
+
+//		graph.getMatrix();
+
+		jFrame.setSize(960, 960);
+		jFrame.add(graph.getJPanel());
+//		jFrame.pack();
+		jFrame.setDefaultCloseOperation(3);
+		jFrame.setVisible(true);
+
+	}
+
+}

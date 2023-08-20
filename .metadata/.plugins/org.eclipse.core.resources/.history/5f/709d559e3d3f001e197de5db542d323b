@@ -1,0 +1,47 @@
+package bfs_2d;
+
+import javax.swing.JFrame;
+
+public class Main {
+
+	public static void main(String[] args) {
+		int rows = 50, cols = 28, maxVerTex = rows * cols;
+		JFrame jFrame = new JFrame("BFS");
+		Graph graph = new Graph(maxVerTex, rows, cols);
+		int dir = 1;
+		int directionNumber = 4;
+//		System.out.println(maxVerTex);
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				graph.addVertex(new Point(i, j), i, j);
+			}
+		}
+//		System.out.println(graph.getVertexcies().length);
+//		Auto add edge
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				for (int d = 0; d < directionNumber; d++) {
+					dir *= -1;
+					if (d < 2) {
+						if (graph.isExist(new Point(i, j), new Point(i - dir, j))) {
+							graph.addEdge(new Point(i, j), new Point(i - dir, j));
+						}
+					} else {
+						if (graph.isExist(new Point(i, j), new Point(i, j - dir))) {
+							graph.addEdge(new Point(i, j), new Point(i, j - dir));
+						}
+					}
+				}
+			}
+		}
+
+		graph.breadthFirstSearch_2d(new Point(1, 1), new Point(29, 27));
+
+		jFrame.setSize(1000, 560);
+		jFrame.add(graph);
+		jFrame.setDefaultCloseOperation(3);
+		jFrame.setVisible(true);
+
+	}
+
+}
