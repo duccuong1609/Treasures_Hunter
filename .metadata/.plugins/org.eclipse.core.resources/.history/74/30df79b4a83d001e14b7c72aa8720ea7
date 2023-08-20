@@ -1,0 +1,10 @@
+package utilz;
+
+public class Support_Color {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
